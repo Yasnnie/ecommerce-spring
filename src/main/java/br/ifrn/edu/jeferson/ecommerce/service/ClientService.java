@@ -27,10 +27,7 @@ public class ClientService {
     private ClienteMapper clienteMapper;
 
 
-
-
     public ClienteResponseDTO salvar(ClienteRequestDTO clienteDTO) {
-
         if(clienteRepository.existsByEmail(clienteDTO.getEmail()))
             throw new BusinessException("Já existe um cliente com esse email");
 
@@ -44,20 +41,40 @@ public class ClientService {
     }
 
     public Page<ClienteResponseDTO> listarClientes(Pageable pageable) {
-
         Page<Cliente> clientesPage = clienteRepository.findAll(pageable);
-
-        System.out.println(clientesPage.getContent());
         return clientesPage.map(clienteMapper::toDTO);
     }
 
 
     public ClienteResponseDTO getById(Long id) {
         Optional<Cliente> cliente = clienteRepository.findById(id);
-        System.out.println("cliente: " + cliente);
         if(!cliente.isPresent())
             throw  new ResourceNotFoundException("Cliente não encontrado");
 
         return clienteMapper.toDTO(cliente.get());
+    }
+
+    public void deletar(Long id) {
+        if (!clienteRepository.existsById(id)) {
+            throw new ResourceNotFoundException("Cliente não encontrado");
+        }
+        clienteRepository.deleteById(id);
+    }
+
+    public ClienteResponseDTO atualizar(Long id, ClienteRequestDTO clienteRequestDTO) {
+        Cliente cliente = clienteRepository.findById(id).orElseThrow( () -> new ResourceNotFoundException("Cliente não encontrado"));
+
+        if (!cliente.getEmail().equals(clienteRequestDTO.getEmail()) && clienteRepository.existsByEmail( clienteRequestDTO.getEmail()) ) {
+            throw  new BusinessException("Email já existente");
+        }
+
+        if (!cliente.getCpf().equals(clienteRequestDTO.getCpf()) && clienteRepository.existsByCpf(clienteRequestDTO.getCpf()) ) {
+            throw  new BusinessException("CPF já cadastrado");
+        }
+
+        clienteMapper.updateEntityFromDTO(clienteRequestDTO, cliente);
+        var updatedClient = clienteRepository.save(cliente);
+
+        return clienteMapper.toDTO(updatedClient);
     }
 }

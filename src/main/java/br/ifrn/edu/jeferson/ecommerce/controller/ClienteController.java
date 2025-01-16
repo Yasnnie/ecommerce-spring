@@ -1,7 +1,5 @@
 package br.ifrn.edu.jeferson.ecommerce.controller;
 
-
-
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -38,6 +36,19 @@ public class ClienteController {
     @GetMapping("/{id}/")
     public ResponseEntity<ClienteResponseDTO> buscarPorId(@PathVariable Long id) {
         return ResponseEntity.ok(clienteService.getById(id));
+    }
+
+    @Operation(summary = "Deletar um cliente")
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deletar(@PathVariable Long id) {
+        clienteService.deletar(id);
+        return ResponseEntity.ok().build();
+    }
+
+    @Operation(summary = "Atualizar cliente")
+    @PutMapping("/{id}")
+    public ResponseEntity<ClienteResponseDTO> atualizar(@PathVariable Long id, @RequestBody ClienteRequestDTO categoriaDto) {
+        return ResponseEntity.ok(clienteService.atualizar(id, categoriaDto));
     }
 
 
