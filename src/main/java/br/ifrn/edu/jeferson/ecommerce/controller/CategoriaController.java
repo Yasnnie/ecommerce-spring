@@ -44,4 +44,10 @@ public class CategoriaController {
         return ResponseEntity.ok(categoriaService.atualizar(id, categoriaDto));
     }
 
+    @Operation(summary = "Buscar categoria por ID")
+    @GetMapping("/{id}")
+    public ResponseEntity<CategoriaResponseDTO> categoriaById(@RequestParam Long id) {
+        return ResponseEntity.ok(categoriaService.buscarPorId(id));
+    }
+
 }

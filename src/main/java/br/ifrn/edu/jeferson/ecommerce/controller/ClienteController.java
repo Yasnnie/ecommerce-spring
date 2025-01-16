@@ -76,5 +76,12 @@ public class ClienteController {
         return ResponseEntity.ok(enderecoService.atualizar(id, enderecoDto));
     }
 
+    @Operation(summary = "Remover endereço do cliente")
+    @DeleteMapping("/{id}/enderecos")
+    public ResponseEntity<Void> removerEndereco(@PathVariable Long id) {
+        enderecoService.deletar(id);
+        return ResponseEntity.ok().build();
+    }
+
 }
 

@@ -53,4 +53,10 @@ public class EnderecoService {
         return enderecoMapper.toDTO(enderecoRepository.save(endereco));
     }
 
+    public void deletar(Long id) {
+        Endereco endereco = enderecoRepository.findByCliente_Id(id).orElseThrow( () -> new ResourceNotFoundException("Endereço não encontrado"));
+
+        enderecoRepository.deleteById(endereco.getId());
+    }
+
 }
