@@ -31,6 +31,9 @@ public class PedidoResponseDTO {
     @Schema(description = "Status do pedido", example = "PENDENTE")
     private StatusPedido statusPedido;
 
+    @Schema(description = "Status do pedido", example = "PENDENTE")
+    private ClienteResponseDTO cliente;
+
     @Schema(description = "Lista de itens do pedido")
     private List<ItemPedidoResponseDTO> itens;
 }

@@ -1,14 +1,12 @@
 package br.ifrn.edu.jeferson.ecommerce.controller;
 
-import br.ifrn.edu.jeferson.ecommerce.domain.dtos.EnderecoRequestDTO;
-import br.ifrn.edu.jeferson.ecommerce.domain.dtos.EnderecoResponseDTO;
+import br.ifrn.edu.jeferson.ecommerce.domain.dtos.*;
 import br.ifrn.edu.jeferson.ecommerce.service.EnderecoService;
+import br.ifrn.edu.jeferson.ecommerce.service.PedidosService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import br.ifrn.edu.jeferson.ecommerce.domain.dtos.ClienteRequestDTO;
-import br.ifrn.edu.jeferson.ecommerce.domain.dtos.ClienteResponseDTO;
 import br.ifrn.edu.jeferson.ecommerce.service.ClientService;
 import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +25,10 @@ public class ClienteController {
     private ClientService clienteService;
     @Autowired
     private EnderecoService enderecoService;
+
+
+    @Autowired
+    private PedidosService pedidosService;
 
     @Operation(summary = "Listar clientes páginado")
     @GetMapping("/")
@@ -83,6 +85,13 @@ public class ClienteController {
     public ResponseEntity<Void> removerEndereco(@PathVariable Long id) {
         enderecoService.deletar(id);
         return ResponseEntity.ok().build();
+    }
+
+    @Operation(summary = "Listar pedidos por cliente")
+    @GetMapping("/{id}/pedidos")
+    public ResponseEntity<List<PedidoResponseDTO>> listarPedidosPorCliente(@PathVariable Long id) {
+        List<PedidoResponseDTO> pedidos = pedidosService.listarPedidosPorCliente(id);
+        return ResponseEntity.ok(pedidos);
     }
 
 }

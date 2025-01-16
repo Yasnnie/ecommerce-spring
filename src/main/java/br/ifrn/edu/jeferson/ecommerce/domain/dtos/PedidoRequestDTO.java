@@ -20,9 +20,6 @@ public class PedidoRequestDTO {
     @Schema(description = "Data e hora do pedido", example = "2025-01-15T14:30:00")
     private LocalDateTime dataPedido;
 
-    @Schema(description = "Status do pedido", example = "AGUARDANDO")
-    private StatusPedido statusPedido;
-
     @Schema(description = "Id do cliente associado", example = "1")
     private Long clienteId;
 

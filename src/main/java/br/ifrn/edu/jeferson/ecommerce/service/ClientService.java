@@ -6,6 +6,7 @@ import br.ifrn.edu.jeferson.ecommerce.exception.BusinessException;
 import br.ifrn.edu.jeferson.ecommerce.exception.ResourceNotFoundException;
 import br.ifrn.edu.jeferson.ecommerce.mapper.*;
 import br.ifrn.edu.jeferson.ecommerce.repository.*;
+import br.ifrn.edu.jeferson.ecommerce.utils.CPFUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.data.domain.Page;
@@ -20,11 +21,10 @@ public class ClientService {
     private ClienteRepository clienteRepository;
 
     @Autowired
-    private EnderecoRepository enderecoRepository;
+    private PedidoRepository pedidoRepository;
 
     @Autowired
     private ClienteMapper clienteMapper;
-
 
     public ClienteResponseDTO salvar(ClienteRequestDTO clienteDTO) {
         if(clienteRepository.existsByEmail(clienteDTO.getEmail()))
@@ -32,6 +32,10 @@ public class ClientService {
 
        if(clienteRepository.existsByCpf(clienteDTO.getCpf()))
            throw new BusinessException("Já existe um cliente com esse CPF");
+
+        if (!CPFUtils.isValidCPF(clienteDTO.getCpf())) {
+            throw new BusinessException("O CPF informado é inválido");
+        }
 
         Cliente newClient = clienteMapper.toEntity(clienteDTO);
 
@@ -56,6 +60,10 @@ public class ClientService {
     public void deletar(Long id) {
         if (!clienteRepository.existsById(id)) {
             throw new ResourceNotFoundException("Cliente não encontrado");
+        }
+
+        if (pedidoRepository.existsByClienteId(id)) {
+            throw new BusinessException("Não é possível deletar o cliente, pois ele possui pedidos associados.");
         }
         clienteRepository.deleteById(id);
     }
