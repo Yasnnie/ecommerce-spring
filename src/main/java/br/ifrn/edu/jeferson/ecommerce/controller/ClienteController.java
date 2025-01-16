@@ -1,5 +1,8 @@
 package br.ifrn.edu.jeferson.ecommerce.controller;
 
+import br.ifrn.edu.jeferson.ecommerce.domain.dtos.EnderecoRequestDTO;
+import br.ifrn.edu.jeferson.ecommerce.domain.dtos.EnderecoResponseDTO;
+import br.ifrn.edu.jeferson.ecommerce.service.EnderecoService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -18,6 +21,8 @@ import org.springframework.web.bind.annotation.*;
 public class ClienteController {
     @Autowired
     private ClientService clienteService;
+    @Autowired
+    private EnderecoService enderecoService;
 
     @Operation(summary = "Listar clientes páginado")
     @GetMapping("/")
@@ -52,5 +57,12 @@ public class ClienteController {
     }
 
 
+
+
+    @Operation(summary = "Cadastrar endereço para cliente")
+    @PostMapping("/{id}/enderecos")
+    public ResponseEntity<EnderecoResponseDTO> cadastrarEndereco(@PathVariable Long id, @RequestBody EnderecoRequestDTO enderecoDto) {
+        return ResponseEntity.ok(enderecoService.salvar(id, enderecoDto));
+    }
 }
 
