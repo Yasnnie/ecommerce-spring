@@ -11,10 +11,12 @@ import br.ifrn.edu.jeferson.ecommerce.domain.dtos.ClienteResponseDTO;
 import br.ifrn.edu.jeferson.ecommerce.service.ClientService;
 import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.web.PageableDefault;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @Controller
 @RequestMapping("/api/clientes")
@@ -56,13 +58,23 @@ public class ClienteController {
         return ResponseEntity.ok(clienteService.atualizar(id, categoriaDto));
     }
 
-
-
-
     @Operation(summary = "Cadastrar endereço para cliente")
     @PostMapping("/{id}/enderecos")
     public ResponseEntity<EnderecoResponseDTO> cadastrarEndereco(@PathVariable Long id, @RequestBody EnderecoRequestDTO enderecoDto) {
         return ResponseEntity.ok(enderecoService.salvar(id, enderecoDto));
     }
+
+    @Operation(summary = " Buscar endereço do cliente")
+    @GetMapping("/{id}/enderecos")
+    public ResponseEntity<EnderecoResponseDTO> listEnderecos(@PathVariable Long id) {
+        return ResponseEntity.ok(enderecoService.getByClientId(id));
+    }
+
+    @Operation(summary = "Atualizar endereço do cliente")
+    @PutMapping("/{id}/enderecos")
+    public ResponseEntity<EnderecoResponseDTO> updateEndereco(@PathVariable Long id, @RequestBody EnderecoRequestDTO enderecoDto) {
+        return ResponseEntity.ok(enderecoService.atualizar(id, enderecoDto));
+    }
+
 }
 
