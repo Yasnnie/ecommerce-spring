@@ -3,6 +3,7 @@ package br.ifrn.edu.jeferson.ecommerce.controller;
 import br.ifrn.edu.jeferson.ecommerce.domain.dtos.EnderecoRequestDTO;
 import br.ifrn.edu.jeferson.ecommerce.domain.dtos.EnderecoResponseDTO;
 import br.ifrn.edu.jeferson.ecommerce.service.EnderecoService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -20,6 +21,7 @@ import java.util.List;
 
 @Controller
 @RequestMapping("/api/clientes")
+@Tag(name = "Clientes", description = "API de gerenciamento de clientes")
 public class ClienteController {
     @Autowired
     private ClientService clienteService;
